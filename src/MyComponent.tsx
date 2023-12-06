@@ -13,6 +13,8 @@ interface Character {
 const MyComponent: React.FC = () => {
     const [data, setData] = useState<Character[]>([]);
     const [search, setSearch] = useState('');
+    const [index, setIndex] = useState(0);
+
 
     useEffect(() => {
         fetch('https://rickandmortyapi.com/api/character/')
@@ -24,6 +26,13 @@ const MyComponent: React.FC = () => {
         character.name.toLowerCase().includes(search.toLowerCase())
     );
 
+    const displayedData = filteredData.slice(index, index + 5);
+
+    const handleNextClick = () => {
+        setIndex(prevIndex => prevIndex + 5);
+    };
+
+
     return (
         <div>
             <input
@@ -32,8 +41,9 @@ const MyComponent: React.FC = () => {
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Suche"
             />
-            {filteredData.length > 0 ? (
-                filteredData.map(character => (
+            <button onClick={handleNextClick}>Nächste 5</button>
+            {displayedData.length > 0 ? (
+                displayedData.map(character => (
                     <div key={character.id}>
                         <p></p>
                         <img src={character.image} alt={character.name} />
